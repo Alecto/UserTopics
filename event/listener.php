@@ -27,11 +27,19 @@ class listener implements EventSubscriberInterface
 	{
 		return array(
 			'core.user_setup'					=>	'load_language_on_setup',
-			'core.memberlist_view_profile'			=> 'page_header_after',
+			'core.memberlist_view_profile'			=> 'memberlist_view_profile',
+			'core.page_header_after'			=> 'page_header_after',
 		);
 	}
 
 	public function page_header_after($event)
+	{
+		$this->template->assign_vars(array(
+			'USER_TOPICS_OWN_LINK'   => append_sid("{$this->phpbb_root_path}search.$this->php_ext", 'search_id=egosearch&amp;sr=topics&amp;sf=firstpost'),
+			        ));
+	}
+
+	public function memberlist_view_profile($event)
 	{
 		$user_id = $this->request->variable('u', 0);
 		$sql = 'SELECT COUNT(topic_id) as user_topics FROM ' . TOPICS_TABLE . ' WHERE topic_status <> ' . ITEM_MOVED . ' AND topic_poster = ' . (int) $user_id;
@@ -41,8 +49,8 @@ class listener implements EventSubscriberInterface
 		$user_topics = $row['user_topics']; //Задаём значение результата запроса переменной $user_topics 
 
 		$this->template->assign_vars(array(
-			'PROFILE_USER_ID'	=> $user_id,
 			'USER_TOPICS_COUNT'	=> $user_topics,
+			'USER_TOPICS_PROFILE_LINK'   => append_sid("{$this->phpbb_root_path}search.$this->php_ext", 'author_id=' . $user_id . '&amp;sr=topics&amp;sf=firstpost'),
 			        ));
 
 	}
