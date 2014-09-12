@@ -1,0 +1,11 @@
+services:
+    alecto.UserTopics.listener:
+        class: alecto\UserTopics\event\listener
+        arguments:
+            - @template
+            - @dbal.conn
+            - @request
+            - %core.root_path%
+            - %core.php_ext%
+        tags:
+            - { name: event.listener }

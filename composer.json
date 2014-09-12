@@ -1,0 +1,25 @@
+{
+    "name": "alecto/UserTopics",
+    "type": "phpbb-extension",
+    "description": "",
+    "homepage": "http://phpbbguru.net",
+    "version": "0.0.1",
+    "time": "2014-08-12",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Alecto",
+            "homepage": "http://phpbbguru.net",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "extra": {
+        "display-name": "User Topics",
+        "soft-require": {
+		    "phpbb/phpbb": "3.1.*@dev"
+        }
+    }
+}
