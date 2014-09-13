@@ -29,7 +29,19 @@ class listener implements EventSubscriberInterface
 			'core.user_setup'					=>	'load_language_on_setup',
 			'core.memberlist_view_profile'			=> 'memberlist_view_profile',
 			'core.page_header_after'			=> 'page_header_after',
+			'core.viewtopic_modify_post_row'         => 'viewtopic_poster_topics',
 		);
+	}
+
+	public function viewtopic_poster_topics($event)
+	{
+		$postrow = $event['post_row'];
+		$poster_id = $event['poster_id'];
+		$postrow = array_merge($postrow, array(
+			'USER_TOPICS_MINIPROFILE_LINK'   => append_sid("{$this->phpbb_root_path}search.$this->php_ext", 'author_id=' . $poster_id . '&sr=topics&sf=firstpost'),
+				));
+
+		$event['post_row'] = $postrow;
 	}
 
 	public function page_header_after($event)
