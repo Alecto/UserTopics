@@ -1,8 +1,26 @@
 
 <!-- IF SCRIPT_NAME == "search" -->
+
 	<script type="text/javascript">
- 		if(window.location.href.indexOf("sr=topics&sf=firstpost") > -1) {
-			document.getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_FROM_LINKS}";
-		 }
+
+		var isTopics = window.location.href.indexOf("sr=topics&sf=firstpost");
+		var isEgosearch = window.location.href.indexOf("id=egosearch");
+
+ 		if( isTopics > -1 && isEgosearch > -1 ) {
+			document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_FROM_LINKS}";
+		} else if( isTopics > -1 && isEgosearch == -1 ) {
+
+			if ( !document.getElementById('page-body').getElementsByClassName("list-inner")[1] ) {
+				document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_HAVE_NO}";
+			} else	if ( document.getElementById('page-body').getElementsByClassName("list-inner")[1].getElementsByClassName("username-coloured")[0] ) {
+				var isUserName = document.getElementById('page-body').getElementsByClassName("list-inner")[1].getElementsByClassName("username-coloured")[0].innerHTML;
+				document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_MINIPROFILE_TEXT}" + " " + isUserName;
+			} else if ( document.getElementById('page-body').getElementsByClassName("list-inner")[1].getElementsByClassName("username")[0] ) {
+				var isUserName = document.getElementById('page-body').getElementsByClassName("list-inner")[1].getElementsByClassName("username")[0].innerHTML;
+				document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_MINIPROFILE_TEXT}" + " " + isUserName;
+			}
+		}
+
 	</script>
+
 <!-- ENDIF -->

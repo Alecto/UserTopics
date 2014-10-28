@@ -2,9 +2,12 @@
 <!-- IF S_REGISTERED_USER -->
 	<dt>{L_USER_TOPICS_PROFILE_TEXT}</dt>
 	<dd>
-		{USER_TOPICS_COUNT} | 
-		<a href="{USER_TOPICS_PROFILE_LINK}">	
+		{USER_TOPICS_COUNT}
+		<!-- IF USER_TOPICS_COUNT > 0 -->
+		 | <a href="{USER_TOPICS_PROFILE_LINK}">	
 			<strong>{L_USER_TOPICS_FROM_PROFILE}</strong>
 		</a>
+		<!-- ENDIF -->
+
 	</dd>
 <!-- ENDIF -->
