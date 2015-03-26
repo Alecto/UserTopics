@@ -12,12 +12,7 @@
 
 			if ( !document.getElementById('page-body').getElementsByClassName("list-inner")[1] ) {
 				document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_HAVE_NO}";
-			} else	if ( document.getElementById('page-body').getElementsByClassName("list-inner")[1].getElementsByClassName("username-coloured")[0] ) {
-				var isUserName = document.getElementById('page-body').getElementsByClassName("list-inner")[1].getElementsByClassName("username-coloured")[0].innerHTML;
-				document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_MINIPROFILE_TEXT}" + " " + isUserName;
-			} else if ( document.getElementById('page-body').getElementsByClassName("list-inner")[1].getElementsByClassName("username")[0] ) {
-				var isUserName = document.getElementById('page-body').getElementsByClassName("list-inner")[1].getElementsByClassName("username")[0].innerHTML;
-				document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_MINIPROFILE_TEXT}" + " " + isUserName;
+			} else {				document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_MINIPROFILE_TEXT} {USERNAME_TOPICS_SEARCH}";
 			}
 		}
 

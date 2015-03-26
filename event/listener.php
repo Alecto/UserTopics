@@ -30,8 +30,43 @@ class listener implements EventSubscriberInterface
 			'core.memberlist_view_profile'			=> 'memberlist_view_profile',
 			'core.page_header_after'			=> 'page_header_after',
 			'core.viewtopic_modify_post_row'         => 'viewtopic_poster_topics',
+			'core.search_modify_param_before'      => 'search_modify_param_before',
 		);
 	}
+
+	public function search_modify_param_before($event)
+	{
+		$topic_id        = $this->request->variable('t', 0);
+		$author_id      = $this->request->variable('author_id', 0);
+		$search_fields   = $this->request->variable('sf', 'all');
+		$show_results   = ($topic_id) ? 'posts' : $this->request->variable('sr', 'posts');
+		$show_results   = ($show_results == 'posts') ? 'posts' : 'topics';
+
+		// Получаем имя пользователя по его ID
+		$sql = 'SELECT username FROM phpbb_users where user_id = ' . $author_id;
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+		$user_name = $row['username']; 
+
+		// Поиск своих тем
+		if ($event['search_id'] == 'egosearch' && $show_results == 'topics')
+		{
+			$this->template->assign_vars(array(
+			'S_EGO_TOPICS_SEARCH'   => true,
+			));
+		};
+
+		// Поиск тем любого пользователя. Автор с id == 1 - это любой гость
+		if ($author_id >= 1 && $show_results == 'topics')
+		{
+			$this->template->assign_vars(array(
+				'S_USER_TOPICS_SEARCH'   => true,
+				'USERNAME_TOPICS_SEARCH'   => $user_name,
+				'USER_BY_ID_TOPICS_LINK_BREADCRUMB'   => append_sid("{$this->phpbb_root_path}search.$this->php_ext", 'author_id=' . $author_id . '&amp;sr=topics&amp;sf=firstpost'),
+			));
+		};
+		}
 
 	public function viewtopic_poster_topics($event)
 	{
@@ -40,7 +75,6 @@ class listener implements EventSubscriberInterface
 		$postrow = array_merge($postrow, array(
 			'USER_TOPICS_MINIPROFILE_LINK'   => append_sid("{$this->phpbb_root_path}search.$this->php_ext", 'author_id=' . $poster_id . '&sr=topics&sf=firstpost'),
 				));
-
 		$event['post_row'] = $postrow;
 	}
 
@@ -64,7 +98,6 @@ class listener implements EventSubscriberInterface
 			'USER_TOPICS_COUNT'	=> $user_topics,
 			'USER_TOPICS_PROFILE_LINK'   => append_sid("{$this->phpbb_root_path}search.$this->php_ext", 'author_id=' . $user_id . '&amp;sr=topics&amp;sf=firstpost'),
 			        ));
-
 	}
 
 	public function load_language_on_setup($event)
