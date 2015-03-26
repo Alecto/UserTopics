@@ -25,8 +25,9 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'USER_TOPICS_PROFILE_TEXT'					=> 'Всего тем: ',
 	'USER_TOPICS_FROM_PROFILE'					=> 'Найти все темы пользователя',
-	'USER_TOPICS_FROM_LINKS'					=> 'Ваши темы',
+	'OWN_TOPICS_FROM_LINKS'					=> 'Ваши темы',
 	'USER_TOPICS_MINIPROFILE_TEXT'					=> 'Темы пользователя',
-	'USER_TOPICS_HAVE_NO'						=> 'Пользователь не создал ни одной темы',
+	'USER_HAVE_NOT_TOPICS'						=> 'Пользователь не создал ни одной темы',
+	'NO_OWN_TOPICS'						=> 'Вы не создали ни одной темы',
 	'USER_TOPICS_FROM_MINIPROFILE'					=> 'найти',
 ));

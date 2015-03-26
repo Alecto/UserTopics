@@ -14,11 +14,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class listener implements EventSubscriberInterface
 {
 
-	public function __construct(\phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\request\request $request, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\request\request $request, \phpbb\user $user, $phpbb_root_path, $php_ext)
 	{
 		$this->template = $template;
 		$this->db = $db;
 		$this->request = $request;
+		$this->user = $user;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
 	}
@@ -42,31 +43,49 @@ class listener implements EventSubscriberInterface
 		$show_results   = ($topic_id) ? 'posts' : $this->request->variable('sr', 'posts');
 		$show_results   = ($show_results == 'posts') ? 'posts' : 'topics';
 
-		// Получаем имя пользователя по его ID
-		$sql = 'SELECT username FROM phpbb_users where user_id = ' . $author_id;
-		$result = $this->db->sql_query($sql);
-		$row = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);
-		$user_name = $row['username']; 
-
 		// Поиск своих тем
 		if ($event['search_id'] == 'egosearch' && $show_results == 'topics')
 		{
+			$user_id = $this->user->data['user_id'];
+
+			// Получаем количество тем пользователя по его ID
+			$sql = 'SELECT COUNT(topic_id) as user_topics FROM ' . TOPICS_TABLE . ' WHERE topic_status <> ' . ITEM_MOVED . ' AND topic_poster = ' . (int) $user_id;
+			$result = $this->db->sql_query($sql);
+			$row = $this->db->sql_fetchrow($result);
+			$this->db->sql_freeresult($result);
+			$user_topics = $row['user_topics'];
+
 			$this->template->assign_vars(array(
 			'S_EGO_TOPICS_SEARCH'   => true,
+			'OWN_TOPICS_COUNT_SEARCH'   => $user_topics,
 			));
-		};
-
+		}
 		// Поиск тем любого пользователя. Автор с id == 1 - это любой гость
-		if ($author_id >= 1 && $show_results == 'topics')
+		else if ($author_id >= 1 && $show_results == 'topics')
 		{
+
+			// Получаем количество тем пользователя по его ID
+			$sql = 'SELECT COUNT(topic_id) as user_topics FROM ' . TOPICS_TABLE . ' WHERE topic_status <> ' . ITEM_MOVED . ' AND topic_poster = ' . (int) $author_id;
+			$result = $this->db->sql_query($sql);
+			$row = $this->db->sql_fetchrow($result);
+			$this->db->sql_freeresult($result);
+			$user_topics = $row['user_topics']; 
+
+			// Получаем имя пользователя по его ID
+			$sql = 'SELECT username FROM ' .USERS_TABLE. ' where user_id = ' . $author_id;
+			$result = $this->db->sql_query($sql);
+			$row = $this->db->sql_fetchrow($result);
+			$this->db->sql_freeresult($result);
+			$user_name = $row['username']; 
+
 			$this->template->assign_vars(array(
 				'S_USER_TOPICS_SEARCH'   => true,
 				'USERNAME_TOPICS_SEARCH'   => $user_name,
-				'USER_BY_ID_TOPICS_LINK_BREADCRUMB'   => append_sid("{$this->phpbb_root_path}search.$this->php_ext", 'author_id=' . $author_id . '&amp;sr=topics&amp;sf=firstpost'),
+				'USER_TOPICS_COUNT_SEARCH'   => $user_topics,
+				'USER_BY_ID_TOPICS_SEARCH_BREADCRUMB_LINK'   => append_sid("{$this->phpbb_root_path}search.$this->php_ext", 'author_id=' . $author_id . '&amp;sr=topics&amp;sf=firstpost'),
 			));
 		};
-		}
+	}
 
 	public function viewtopic_poster_topics($event)
 	{

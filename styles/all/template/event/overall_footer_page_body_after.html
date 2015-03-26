@@ -3,18 +3,11 @@
 
 	<script type="text/javascript">
 
-		var isTopics = window.location.href.indexOf("sr=topics&sf=firstpost");
-		var isEgosearch = window.location.href.indexOf("id=egosearch");
-
- 		if( isTopics > -1 && isEgosearch > -1 ) {
-			document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_FROM_LINKS}";
-		} else if( isTopics > -1 && isEgosearch == -1 ) {
-
-			if ( !document.getElementById('page-body').getElementsByClassName("list-inner")[1] ) {
-				document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_HAVE_NO}";
-			} else {				document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="{L_USER_TOPICS_MINIPROFILE_TEXT} {USERNAME_TOPICS_SEARCH}";
-			}
-		}
+	<!-- IF S_EGO_TOPICS_SEARCH -->
+			document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="<!-- IF OWN_TOPICS_COUNT_SEARCH == 0 -->{L_NO_OWN_TOPICS}<!-- ELSE -->{L_OWN_TOPICS_FROM_LINKS} ({OWN_TOPICS_COUNT_SEARCH})<!-- ENDIF -->";
+	<!-- ELSEIF S_USER_TOPICS_SEARCH -->
+			document.getElementById('page-body').getElementsByClassName("searchresults-title")[0].innerHTML ="<!-- IF USER_TOPICS_COUNT_SEARCH == 0 -->{L_USER_HAVE_NOT_TOPICS}<!-- ELSE -->{L_USER_TOPICS_MINIPROFILE_TEXT} {USERNAME_TOPICS_SEARCH} ({USER_TOPICS_COUNT_SEARCH})<!-- ENDIF -->";
+	<!-- ENDIF -->
 
 	</script>
 
