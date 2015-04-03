@@ -2,14 +2,14 @@
     "name": "alecto/UserTopics",
     "type": "phpbb-extension",
     "description": "",
-    "homepage": "http://phpbbguru.net",
+    "homepage": "http://motobratva.com",
     "version": "1.0.2",
     "time": "2014-08-12",
     "license": "GPL-2.0",
     "authors": [
         {
             "name": "Alecto",
-            "homepage": "http://phpbbguru.net",
+            "homepage": "http://motobratva.com",
             "role": "Developer"
         }
     ],
@@ -23,7 +23,7 @@
         },
         "version-check": {
             "host": "motobratva.com",
-            "directory": "/cnstat/versions",
+            "directory": "/versions",
             "filename": "usertopics.json"
         }
 
