@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* my [Russian]
+* [Ukraine]
 *
 * @package language quickreply
 * @copyright (c) 2013 Alecto
